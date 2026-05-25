@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { useShallow } from 'zustand/react/shallow'
 import { useGameStore, selectRanking } from '@/store/useGameStore'
 import Podium from './Podium'
 import RankingTable from './RankingTable'
@@ -23,8 +24,15 @@ function formatTime(ts: number): string {
 
 export default function ScoreboardPage() {
   const navigate = useNavigate()
-  const { status, players, events, startedAt } = useGameStore()
-  const ranking = useGameStore(selectRanking)
+  const { status, players, events, startedAt } = useGameStore(
+    useShallow((s) => ({
+      status: s.status,
+      players: s.players,
+      events: s.events,
+      startedAt: s.startedAt,
+    })),
+  )
+  const ranking = useGameStore(useShallow(selectRanking))
 
   const rankedPlayers: RankedPlayer[] = ranking.map((p, i) => ({ ...p, rank: i + 1 }))
   const top3 = rankedPlayers.filter((p) => p.rank <= 3)

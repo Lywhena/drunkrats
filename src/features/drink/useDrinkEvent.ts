@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { fetchRandomDrink } from '@/lib/cocktaildb'
 import type { CocktailDBDrink } from '@/lib/cocktaildb'
@@ -9,11 +10,13 @@ interface UseDrinkEventResult {
 }
 
 export function useDrinkEvent(): UseDrinkEventResult {
+  const eventKeyRef = useRef(Date.now())
+
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['drink-event', Date.now()],
+    queryKey: ['drink-event', eventKeyRef.current],
     queryFn: fetchRandomDrink,
-    staleTime: 0,          // sempre novo sorteio
-    gcTime: 0,             // não reaproveita cache entre eventos
+    staleTime: 0,
+    gcTime: 0,
     retry: 1,
     refetchOnWindowFocus: false,
   })

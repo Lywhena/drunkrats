@@ -8,7 +8,8 @@ function formatTime(ts: number): string {
 }
 
 export default function EventHistory() {
-  const { events, players } = useGameStore()
+  const events = useGameStore((s) => s.events)
+  const players = useGameStore((s) => s.players)
 
   if (events.length === 0) {
     return (

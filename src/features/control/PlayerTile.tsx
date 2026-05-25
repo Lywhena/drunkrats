@@ -17,24 +17,40 @@ function formatTime(ts: number): string {
 
 export default function PlayerTile({ playerId, index, onOpenCalculator }: PlayerTileProps) {
   const player = useGameStore((s) => s.players.find((p) => p.id === playerId))
-  const { addPoints, removePoints, eliminatePlayer } = useGameStore()
+  const addPoints = useGameStore((s) => s.addPoints)
+  const removePoints = useGameStore((s) => s.removePoints)
+  const eliminatePlayer = useGameStore((s) => s.eliminatePlayer)
 
   const [scoreAnim, setScoreAnim] = useState<'up' | 'down' | null>(null)
   const [lastAction, setLastAction] = useState<{ label: string; ts: number } | null>(null)
-  const prevScore = useRef(player?.score ?? 0)
+  const prevScore = useRef<number | null>(null)
+  const skipNextScoreEffect = useRef(true)
 
-  // Detecta mudança de pontuação e dispara animação
+  useEffect(() => {
+    skipNextScoreEffect.current = true
+    prevScore.current = null
+  }, [playerId])
+
+  // Detecta mudança de pontuação e dispara animação (ignora montagem/hidratação)
   useEffect(() => {
     if (!player) return
-    if (player.score > prevScore.current) {
+
+    if (skipNextScoreEffect.current) {
+      skipNextScoreEffect.current = false
+      prevScore.current = player.score
+      return
+    }
+
+    const prev = prevScore.current ?? player.score
+    if (player.score > prev) {
       setScoreAnim('up')
-      setLastAction({ label: `+${player.score - prevScore.current} pts`, ts: Date.now() })
-    } else if (player.score < prevScore.current) {
+      setLastAction({ label: `+${player.score - prev} pts`, ts: Date.now() })
+    } else if (player.score < prev) {
       setScoreAnim('down')
-      setLastAction({ label: `-${prevScore.current - player.score} pts`, ts: Date.now() })
+      setLastAction({ label: `-${prev - player.score} pts`, ts: Date.now() })
     }
     prevScore.current = player.score
-  }, [player?.score])
+  }, [player?.score, player])
 
   useEffect(() => {
     if (!scoreAnim) return
