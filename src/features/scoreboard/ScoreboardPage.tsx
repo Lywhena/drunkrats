@@ -53,7 +53,7 @@ export default function ScoreboardPage() {
   }
 
   return (
-    <div className="min-h-svh flex flex-col" style={{ background: 'var(--bg)' }}>
+    <div className="min-h-svh flex flex-col pb-nav pl-rail pl-drawer" style={{ background: 'var(--bg)' }}>
 
       {/* ── Header ─────────────────────────────────────────────── */}
       <header

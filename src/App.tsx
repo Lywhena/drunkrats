@@ -1,4 +1,11 @@
-// App.tsx — componente raiz (providers e router estão em main.tsx e router.tsx)
+import NavBar from '@/components/NavBar'
+import Router from './router'
+
 export default function App() {
-  return null
+  return (
+    <>
+      <NavBar />
+      <Router />
+    </>
+  )
 }
