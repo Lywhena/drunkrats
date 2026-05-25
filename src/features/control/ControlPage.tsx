@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Modal } from 'antd'
+import { useShallow } from 'zustand/react/shallow'
 import { useGameStore, selectActivePlayers, selectTotalPoints } from '@/store/useGameStore'
 import { PLAYER_COLORS } from '@/features/players/types'
 import PlayerTile from './PlayerTile'
@@ -21,8 +22,15 @@ function formatElapsed(ms: number): string {
 
 export default function ControlPage() {
   const navigate = useNavigate()
-  const { players, events, startedAt, finishGame } = useGameStore()
-  const activePlayers = useGameStore(selectActivePlayers)
+  const { players, events, startedAt, finishGame } = useGameStore(
+    useShallow((s) => ({
+      players: s.players,
+      events: s.events,
+      startedAt: s.startedAt,
+      finishGame: s.finishGame,
+    })),
+  )
+  const activePlayers = useGameStore(useShallow(selectActivePlayers))
   const totalPoints = useGameStore(selectTotalPoints)
 
   const [elapsed, setElapsed] = useState(0)

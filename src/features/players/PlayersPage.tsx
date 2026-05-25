@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useShallow } from 'zustand/react/shallow'
 import { useGameStore } from '@/store/useGameStore'
 import PlayerCard from './PlayerCard'
 import { PLAYER_COLORS } from './types'
@@ -11,7 +12,13 @@ const MAX_NAME_LEN = 20
 
 export default function PlayersPage() {
   const navigate = useNavigate()
-  const { players, addPlayer, removePlayer } = useGameStore()
+  const { players, addPlayer, removePlayer } = useGameStore(
+    useShallow((s) => ({
+      players: s.players,
+      addPlayer: s.addPlayer,
+      removePlayer: s.removePlayer,
+    })),
+  )
 
   const [form, setForm] = useState<PlayerFormData>({ name: '', color: '' })
   const [error, setError] = useState<string | null>(null)

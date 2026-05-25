@@ -12,7 +12,8 @@ interface MlCalculatorProps {
 const QUICK_POINTS = [5, 10, 20] as const
 
 export default function MlCalculator({ playerId, open, onClose }: MlCalculatorProps) {
-  const { addPoints, players } = useGameStore()
+  const addPoints = useGameStore((s) => s.addPoints)
+  const players = useGameStore((s) => s.players)
   const [ml, setMl] = useState('')
   const [abv, setAbv] = useState('')
 

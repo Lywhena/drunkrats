@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Select, Spin } from 'antd'
+import { useShallow } from 'zustand/react/shallow'
 import { useGameStore, selectActivePlayers } from '@/store/useGameStore'
 import { useDrinkEvent } from './useDrinkEvent'
 import DrinkCard from './DrinkCard'
@@ -16,11 +17,21 @@ function calcBonus(drinkName: string): number {
 
 export default function DrinkPage() {
   const navigate = useNavigate()
-  const { applyDrinkBonus, skipDrinkEvent } = useGameStore()
-  const activePlayers = useGameStore(selectActivePlayers)
+  const { applyDrinkBonus, skipDrinkEvent } = useGameStore(
+    useShallow((s) => ({
+      applyDrinkBonus: s.applyDrinkBonus,
+      skipDrinkEvent: s.skipDrinkEvent,
+    })),
+  )
+  const activePlayers = useGameStore(useShallow(selectActivePlayers))
 
   const { drink, isLoading } = useDrinkEvent()
   const [winnerId, setWinnerId] = useState<string | null>(null)
+
+  const winnerOptions = useMemo(
+    () => activePlayers.map((p) => ({ value: p.id, label: p.name })),
+    [activePlayers],
+  )
 
   function handleApply() {
     if (!drink) return
@@ -119,15 +130,11 @@ export default function DrinkPage() {
                 id="winner-select"
                 size="large"
                 placeholder="Selecionar vencedor..."
-                value={winnerId ?? undefined}
-                onChange={(val: string) => setWinnerId(val)}
+                value={winnerId}
+                onChange={(val) => setWinnerId(val ?? null)}
                 allowClear
-                onClear={() => setWinnerId(null)}
                 style={{ width: '100%' }}
-                options={activePlayers.map((p) => ({
-                  value: p.id,
-                  label: p.name,
-                }))}
+                options={winnerOptions}
                 aria-label="Selecionar o jogador que venceu o evento drink"
               />
               {winnerId === null && (
