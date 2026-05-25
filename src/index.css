@@ -1,24 +1,27 @@
+@import "tailwindcss";
+
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  /* ── Paleta DrunkRats (remapeada da estrutura original do index.css) ── */
+  --bg:            #1a1a1a;
+  --surface:       #222222;
+  --text:          #888888;
+  --text-h:        #f5f5f5;
+  --border:        #2e2e2e;
+  --accent:        #e63946;
+  --accent-2:      #ff6b6b;
+  --accent-bg:     rgba(230, 57, 70, 0.12);
+  --accent-border: rgba(230, 57, 70, 0.45);
+  --shadow:        rgba(0, 0, 0, 0.5) 0 10px 15px -3px,
+                   rgba(0, 0, 0, 0.3) 0 4px 6px -2px;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  /* ── Tipografia ── */
+  --sans:    system-ui, 'Segoe UI', Roboto, sans-serif;
   --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  --mono:    ui-monospace, Consolas, monospace;
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
+  font: 16px/145% var(--sans);
+  color-scheme: dark;
+  color: var(--text-h);
   background: var(--bg);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -26,86 +29,79 @@
   -moz-osx-font-smoothing: grayscale;
 
   @media (max-width: 1024px) {
-    font-size: 16px;
+    font-size: 15px;
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
+/* ── Expor variáveis ao Tailwind v4 ── */
+@theme {
+  --color-bg:           #1a1a1a;
+  --color-surface:      #222222;
+  --color-text:         #888888;
+  --color-text-h:       #f5f5f5;
+  --color-border:       #2e2e2e;
+  --color-primary:      #e63946;
+  --color-accent:       #ff6b6b;
+  --color-accent-bg:    rgba(230, 57, 70, 0.12);
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+  --font-sans:    system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-mono:    ui-monospace, Consolas, monospace;
 }
 
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
+/* ── Reset base ── */
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
-}
-
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
+  background: var(--bg);
   color: var(--text-h);
 }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
+#root {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
 }
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
+
+h1, h2, h3, h4 {
+  font-family: var(--heading);
+  color: var(--text-h);
+  margin: 0;
 }
+
 p {
   margin: 0;
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+/* ── MD3 Typography Scale ── */
+.text-display    { font-size: 3.5rem;  font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
+.text-headline   { font-size: 2rem;    font-weight: 700; letter-spacing: -0.01em; line-height: 1.2; }
+.text-title      { font-size: 1.25rem; font-weight: 600; line-height: 1.3; }
+.text-body       { font-size: 1rem;    font-weight: 400; line-height: 1.5; }
+.text-label      { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
+
+@media (max-width: 1024px) {
+  .text-display  { font-size: 2.5rem; }
+  .text-headline { font-size: 1.5rem; }
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+/* ── Animação de pontuação ── */
+@keyframes score-up {
+  0%   { transform: scale(1);    color: var(--text-h); }
+  50%  { transform: scale(1.25); color: var(--accent-2); }
+  100% { transform: scale(1);    color: var(--text-h); }
 }
+
+@keyframes score-down {
+  0%   { transform: scale(1);    color: var(--text-h); }
+  50%  { transform: scale(0.9);  color: var(--text); }
+  100% { transform: scale(1);    color: var(--text-h); }
+}
+
+.animate-score-up   { animation: score-up   0.35s ease; }
+.animate-score-down { animation: score-down 0.35s ease; }
