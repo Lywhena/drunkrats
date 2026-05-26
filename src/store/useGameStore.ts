@@ -1,8 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-// ── Types ──────────────────────────────────────────────────────────────────
-
 export interface Player {
   id: string
   name: string
@@ -29,7 +27,7 @@ interface GameStore {
   events: DrinkEvent[]
   startedAt: number | null
 
-  // Actions
+
   startGame: () => void
   resetGame: () => void
   addPlayer: (name: string, color: string) => void
@@ -41,8 +39,6 @@ interface GameStore {
   skipDrinkEvent: () => void
   finishGame: () => void
 }
-
-// ── Store ──────────────────────────────────────────────────────────────────
 
 export const useGameStore = create<GameStore>()(
   persist(
@@ -129,8 +125,6 @@ export const useGameStore = create<GameStore>()(
     },
   ),
 )
-
-// ── Selectors ──────────────────────────────────────────────────────────────
 
 export const selectActivePlayers = (s: GameStore) =>
   s.players.filter((p) => p.active)

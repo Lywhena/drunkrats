@@ -91,7 +91,7 @@ export default function NavBar() {
             className="text-title font-bold tracking-tight"
             style={{ color: 'var(--accent)' }}
           >
-            🐀 DrunkRats
+             DrunkRats
           </span>
         </div>
 

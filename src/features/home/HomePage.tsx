@@ -1,21 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useGameStore } from '@/store/useGameStore'
-import type { Rule, WellbeingItem } from './types'
+import { gameRules, wellbeingItems } from './constants/homePageConstants'
 
-const RULES: Rule[] = [
-  { number: 1, text: 'Cadastre o bando — mínimo 2 ratos, cada um com cor e codinome.' },
-  { number: 2, text: 'Some pontos bebendo — pontuação baseada em ml × teor alcoólico.' },
-  { number: 3, text: 'Evento Drink — sorteia um drink aleatório; o primeiro a preparar leva o bônus.' },
-  { number: 4, text: 'Desistiu, saiu — marca o rato como inativo. Sem volta.' },
-  { number: 5, text: 'O último de pé leva — placar final define o campeão.' },
-]
-
-const WELLBEING: WellbeingItem[] = [
-  { text: 'Beba água entre as rodadas.' },
-  { text: 'Se alguém disse "chega" — acabou pra essa pessoa.' },
-  { text: 'Nunca dirija. Nem de patinete. Nem de bicicleta.' },
-  { text: 'Comida na mesa não é opcional, é regra.' },
-]
 
 function hasSavedGame(): boolean {
   try {
@@ -47,12 +33,9 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-svh flex flex-col" style={{ background: 'var(--bg)' }}>
-
-      {/* ── Hero ─────────────────────────────────────────────────── */}
-      <header className="flex flex-col items-center text-center px-6 pt-16 pb-10">
+    <div className="flex-1 w-full flex flex-col justify-center">
+      <header className="flex flex-col items-center text-center px-6 pt-8 pb-8">
         <div className="text-6xl mb-4" aria-hidden="true">🐀</div>
-
         <h1
           className="text-display font-black tracking-tight uppercase mb-2"
           style={{ color: 'var(--text-h)' }}
@@ -60,15 +43,13 @@ export default function HomePage() {
           Drunk<span style={{ color: 'var(--accent)' }}>Rats</span>
         </h1>
 
-        <p className="text-title" style={{ color: 'var(--text)' }}>
+        <p className="text-title" style={{ color: 'var(--text)', fontWeight: '150' }}>
           A gincana oficial da saideira que nunca acaba.
         </p>
-
-        {/* Contadores */}
         <div className="flex gap-8 mt-8">
           {[
-            { value: '00', label: 'BACKEND' },
-            { value: '00', label: 'CONTAS' },
+            { value: '0', label: 'BACKEND' },
+            { value: '0', label: 'CONTAS' },
             { value: '∞',  label: 'RESSACAS' },
           ].map(({ value, label }) => (
             <div key={label} className="flex flex-col items-center gap-1">
@@ -86,11 +67,9 @@ export default function HomePage() {
         </div>
       </header>
 
-      <main className="flex-1 w-full max-w-xl mx-auto px-6 pb-10 flex flex-col gap-8">
+      <main className="w-full max-w-xl mx-auto px-6 pb-8 flex flex-col gap-8">
 
-        {/* ── CTAs ─────────────────────────────────────────────────── */}
         <section className="flex flex-col gap-3" aria-label="Ações principais">
-          {/* CTA principal */}
           {status !== 'finished' && (
             <button
               onClick={handlePrimary}
@@ -110,7 +89,6 @@ export default function HomePage() {
             </button>
           )}
 
-          {/* Estado finished */}
           {status === 'finished' && (
             <>
               <button
@@ -121,7 +99,7 @@ export default function HomePage() {
                 style={{ background: 'var(--accent)', color: '#fff' }}
                 aria-label="Iniciar nova partida"
               >
-                NOVA RESSACA →
+                NOVA RESSACA
               </button>
               <button
                 onClick={() => navigate('/scoreboard')}
@@ -140,7 +118,6 @@ export default function HomePage() {
             </>
           )}
 
-          {/* CTA secundário — ver último placar (idle/setup com jogo salvo) */}
           {status === 'idle' && savedGame && (
             <button
               onClick={() => navigate('/scoreboard')}
@@ -159,18 +136,19 @@ export default function HomePage() {
           )}
         </section>
 
-        {/* ── Manual do Rato ───────────────────────────────────────── */}
-        <section aria-labelledby="rules-heading">
-          <h2
-            id="rules-heading"
-            className="text-label mb-4"
+        <section aria-labelledby="gameRules-heading">
+          <div className="flex  justify-center"> <h4
+            id="gameRules-heading"
+            className="mb-4!"
             style={{ color: 'var(--accent)' }}
           >
-            § Manual do Rato — As Regras
-          </h2>
+            Manual da Ratazana — As Regras
+          </h4>
+          </div>
+         
 
           <ol className="flex flex-col gap-3" role="list">
-            {RULES.map((rule) => (
+            {gameRules.map((rule) => (
               <li
                 key={rule.number}
                 className="flex gap-4 p-4 rounded-xl"
@@ -191,14 +169,13 @@ export default function HomePage() {
           </ol>
         </section>
 
-        {/* ── Bem-estar ────────────────────────────────────────────── */}
         <section
           className="p-5 rounded-xl"
           style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
-          aria-labelledby="wellbeing-heading"
+          aria-labelledby="wellbeingItems-heading"
         >
           <h2
-            id="wellbeing-heading"
+            id="wellbeingItems-heading"
             className="text-label mb-4"
             style={{ color: 'var(--accent)' }}
           >
@@ -206,7 +183,7 @@ export default function HomePage() {
           </h2>
 
           <ul className="flex flex-col gap-2" role="list">
-            {WELLBEING.map((item) => (
+            {wellbeingItems.map((item) => (
               <li
                 key={item.text}
                 className="flex items-start gap-3 text-body"
@@ -226,16 +203,6 @@ export default function HomePage() {
         </section>
       </main>
 
-      {/* ── Rodapé ───────────────────────────────────────────────── */}
-      <footer
-        className="text-center py-6 text-label"
-        style={{
-          color: 'var(--text)',
-          borderTop: '1px solid var(--border)',
-        }}
-      >
-        18+ · BEBA COM MODERAÇÃO · RATOS NÃO DIRIGEM
-      </footer>
     </div>
   )
 }

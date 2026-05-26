@@ -67,7 +67,7 @@ export default function ControlPage() {
   const inactivePlayers = players.filter((p) => !p.active)
 
   return (
-    <div className="min-h-svh flex flex-col pb-nav pl-rail pl-drawer" style={{ background: 'var(--bg)' }}>
+    <div className="min-h-svh flex flex-col" style={{ background: 'var(--bg)' }}>
 
       {/* ── Header ─────────────────────────────────────────────── */}
       <header
