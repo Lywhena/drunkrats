@@ -1,7 +1,7 @@
 import type { Rule, WellbeingItem } from '../types'
 
 export const gameRules: Rule[] = [
-  { number: 1, text: 'Cadastre o bando — mínimo 2 ratos, cada um com cor e codinome.' },
+  { number: 1, text: 'Cadastre as ratazanas — mínimo 2 ratos, cada um com cor e codinome.' },
   { number: 2, text: 'Some pontos bebendo — pontuação baseada em ml × teor alcoólico.' },
   { number: 3, text: 'Evento Drink — sorteia um drink aleatório; o primeiro a preparar leva o bônus.' },
   { number: 4, text: 'Desistiu, saiu — marca o rato como inativo. Sem volta.' },

@@ -24,6 +24,8 @@ export default function HomePage() {
     if (status === 'idle') {
       startGame()
       navigate('/players')
+    } else if (status === 'setup') {
+      navigate('/players')
     } else if (status === 'playing') {
       navigate('/control')
     } else if (status === 'finished') {
@@ -82,10 +84,18 @@ export default function HomePage() {
                 boxShadow: '0 4px 24px var(--accent-bg)',
               }}
               aria-label={
-                status === 'playing' ? 'Continuar a partida em andamento' : 'Começar uma nova bebedeira'
+                status === 'playing'
+                  ? 'Continuar a partida em andamento'
+                  : status === 'setup'
+                    ? 'Continuar adicionando jogadores'
+                    : 'Começar uma nova bebedeira'
               }
             >
-              {status === 'playing' ? 'CONTINUAR PARTIDA →' : 'COMEÇAR BEBEDEIRA →'}
+              {status === 'playing'
+                ? 'CONTINUAR PARTIDA →'
+                : status === 'setup'
+                  ? 'CONTINUAR CONFIGURAÇÃO →'
+                  : 'COMEÇAR BEBEDEIRA →'}
             </button>
           )}
 
@@ -170,16 +180,16 @@ export default function HomePage() {
         </section>
 
         <section
-          className="p-5 rounded-xl"
+          className="p-5 rounded-xl md:flex justify-center items-center"
           style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
           aria-labelledby="wellbeingItems-heading"
         >
           <h2
             id="wellbeingItems-heading"
-            className="text-label mb-4"
+            className="ml-3! md:mb-0! mb-3!"
             style={{ color: 'var(--accent)' }}
           >
-            ⚠️ Antes de começar
+             Antes de começar
           </h2>
 
           <ul className="flex flex-col gap-2" role="list">
