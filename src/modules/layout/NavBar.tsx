@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { useGameStore } from '@/store/useGameStore'
+import { useGameStore } from '@/shared/store/useGameStore'
 
 interface NavItem {
   to: string

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useShallow } from 'zustand/react/shallow'
-import { useGameStore, selectRanking } from '@/store/useGameStore'
+import { useGameStore, selectRanking } from '@/shared/store/useGameStore'
 import Podium from './Podium'
 import RankingTable from './RankingTable'
 import type { RankedPlayer, SessionStats } from './types'

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useShallow } from 'zustand/react/shallow'
-import { useGameStore } from '@/store/useGameStore'
+import { useGameStore } from '@/shared/store/useGameStore'
 import PlayerCard from './PlayerCard'
 import { PLAYER_COLORS } from './types'
 import type { PlayerFormData } from './types'

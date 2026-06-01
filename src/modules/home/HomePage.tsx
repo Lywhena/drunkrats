@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { useGameStore } from '@/store/useGameStore'
+import { useGameStore } from '@/shared/store/useGameStore'
 import { gameRules, wellbeingItems } from './constants/homePageConstants'
 
 

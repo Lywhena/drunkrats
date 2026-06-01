@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Modal } from 'antd'
-import { useGameStore } from '@/store/useGameStore'
-import { calcScore } from '@/lib/scoring'
+import { useGameStore } from '@/shared/store/useGameStore'
+import { calcScore } from '@/shared/lib/scoring'
 
 interface MlCalculatorProps {
   playerId: string | null

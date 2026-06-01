@@ -1,4 +1,4 @@
-import { useGameStore } from '@/store/useGameStore'
+import { useGameStore } from '@/shared/store/useGameStore'
 
 function formatTime(ts: number): string {
   return new Date(ts).toLocaleTimeString('pt-BR', {

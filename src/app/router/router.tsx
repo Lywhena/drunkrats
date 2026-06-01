@@ -1,10 +1,11 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
-import { useGameStore } from '@/store/useGameStore'
-import HomePage from '@/features/home/HomePage'
-import PlayersPage from '@/features/players/PlayersPage'
-import ControlPage from '@/features/control/ControlPage'
-import ScoreboardPage from '@/features/scoreboard/ScoreboardPage'
-import DrinkPage from '@/features/drink/DrinkPage'
+import { useGameStore } from '@/shared/store/useGameStore'
+import HomePage from '@modules/home/HomePage'
+import PlayersPage from '@modules/players/PlayersPage'
+import ControlPage from '@modules/control/ControlPage'
+import ScoreboardPage from '@modules/scoreboard/ScoreboardPage'
+
+import DrinkPage from '@modules/drink/DrinkPage'
 
 // ── Route guards ───────────────────────────────────────────────────────────
 

@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Select, Spin } from 'antd'
 import { useShallow } from 'zustand/react/shallow'
-import { useGameStore, selectActivePlayers } from '@/store/useGameStore'
+import { useGameStore, selectActivePlayers } from '@/shared/store/useGameStore'
 import { useDrinkEvent } from './useDrinkEvent'
 import DrinkCard from './DrinkCard'
 

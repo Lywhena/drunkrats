@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { fetchRandomDrink } from '@/lib/cocktaildb'
-import type { CocktailDBDrink } from '@/lib/cocktaildb'
+import { fetchRandomDrink } from '@/shared/lib/cocktaildb'
+import type { CocktailDBDrink } from '@/shared/lib/cocktaildb'
 
 interface UseDrinkEventResult {
   drink: CocktailDBDrink | undefined

@@ -1,5 +1,5 @@
-import { getIngredients } from '@/lib/cocktaildb'
-import type { CocktailDBDrink } from '@/lib/cocktaildb'
+import { getIngredients } from '@/shared/lib/cocktaildb'
+import type { CocktailDBDrink } from '@/shared/lib/cocktaildb'
 
 interface DrinkCardProps {
   drink: CocktailDBDrink

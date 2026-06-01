@@ -1,4 +1,4 @@
-import PlayerAvatar from '@/components/PlayerAvatar'
+import PlayerAvatar from '@/shared/components/PlayerAvatar'
 import type { RankedPlayer } from './types'
 
 interface PodiumProps {

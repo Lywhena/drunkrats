@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { useGameStore } from '@/store/useGameStore'
-import PlayerAvatar from '@/components/PlayerAvatar'
+import { useGameStore } from '@/shared/store/useGameStore'
+import PlayerAvatar from '@/shared/components/PlayerAvatar'
 
 interface PlayerTileProps {
   playerId: string

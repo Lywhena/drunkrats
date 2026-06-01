@@ -1,18 +1,19 @@
 # CLAUDE.md — DrunkRats
 
-> Guia de desenvolvimento para agentes e LLMs trabalhando neste repositório.
+Aplicação React para gincanas competitivas de bebidas entre amigos.
+Zero backend, zero login — tudo roda no navegador via localStorage.
 
 ---
 
-## Visão Geral do Projeto
+## Comandos essenciais
 
-**DrunkRats** é uma aplicação web React para gincanas competitivas sobre bebidas entre amigos.
-Zero backend, zero login, zero banco de dados — tudo roda no navegador via `localStorage`.
-
-- **Domínio:** jogo de pontuação em tempo real com eventos de drink sorteados
-- **Persistência:** Zustand + middleware `persist` → `localStorage`
-- **Dados descartados:** ao chamar `resetGame()` ao final da partida
-- **API externa:** TheCocktailDB (REST, sem autenticação)
+```bash
+npm run dev        # inicia o servidor de desenvolvimento (Vite HMR)
+npm run build      # build de produção
+npm run preview    # preview do build de produção
+npm run lint       # ESLint
+npm run typecheck  # tsc --noEmit
+```
 
 ---
 
@@ -20,208 +21,130 @@ Zero backend, zero login, zero banco de dados — tudo roda no navegador via `lo
 
 | Camada | Tecnologia |
 |---|---|
-| UI | React 18 + TypeScript |
-| Build | Vite 5 |
+| Framework | React 18 + TypeScript |
+| Build | Vite 5 + plugin @tailwindcss/vite |
 | Roteamento | React Router DOM v6 |
-| Estado global | Zustand + persist middleware |
-| Estilos | Tailwind CSS + Ant Design v5 |
-| Design tokens | Material Design 3 (MUI v6) |
-| Data fetching | React Query (TanStack Query) |
-| API de drinks | TheCocktailDB `/random` |
+| Estado global | Zustand + middleware `persist` |
+| Persistência | localStorage (via Zustand) |
+| Requisições | Tanstack Query (React Query) |
+| UI components | Ant Design v5 |
+| Design system | Material Design 3 via MUI v6 |
+| Estilização | Tailwind CSS (via plugin Vite, sem postcss) |
+| Deploy | Cloudflare Pages via GitHub Actions |
 
 ---
 
-## Estrutura de Pastas (Screaming Architecture)
+## Arquitetura
+
+O projeto segue **Screaming Architecture** (Robert Martin): organização por domínio/feature, não por tipo de arquivo.
 
 ```
 src/
-├── features/
-│   ├── home/               # Tela inicial, regras, CTA
-│   │   ├── HomePage.tsx
+├── app/                   # Entrypoint e configurações globais
+│   ├── App.tsx
+│   ├── main.tsx
+│   └── index.css          # Tailwind base + estilos globais
+├── assets/                # Imagens, fontes, ícones estáticos
+├── modules/               # Todos os domínios de feature
+│   ├── control/           # Controle de pontuação (/control)
+│   │   ├── components/
 │   │   └── types.ts
-│   ├── players/            # Cadastro de jogadores
-│   │   ├── PlayersPage.tsx
-│   │   ├── PlayerCard.tsx
+│   ├── drink/             # Evento drink aleatório (/drink)
+│   │   ├── components/
+│   │   ├── hooks/         # useRandomDrink (Tanstack Query)
 │   │   └── types.ts
-│   ├── control/            # Controle da gincana
-│   │   ├── ControlPage.tsx
-│   │   ├── PlayerTile.tsx
-│   │   ├── MlCalculator.tsx
-│   │   ├── EventHistory.tsx
+│   ├── home/              # Tela inicial (/)
+│   │   └── components/
+│   ├── players/           # Cadastro de jogadores (/players)
+│   │   ├── components/
 │   │   └── types.ts
-│   ├── scoreboard/         # Placar e pódio
-│   │   ├── ScoreboardPage.tsx
-│   │   ├── Podium.tsx
-│   │   ├── RankingTable.tsx
-│   │   └── types.ts
-│   └── drink/              # Evento drink
-│       ├── DrinkPage.tsx
-│       ├── DrinkCard.tsx
-│       ├── useDrinkEvent.ts
+│   └── scoreboard/        # Placar (/scoreboard)
+│       ├── components/
 │       └── types.ts
-├── store/
-│   └── useGameStore.ts     # Zustand store principal
-├── lib/
-│   ├── cocktaildb.ts       # Wrapper da TheCocktailDB API
-│   └── scoring.ts          # Lógica de pontuação (ml × teor)
-├── components/             # UI genérica reutilizável
-│   ├── NavBar.tsx
-│   └── PlayerAvatar.tsx
-├── router.tsx              # React Router declarativo
-└── main.tsx
+└── shared/                # Código compartilhado entre módulos
+    ├── components/        # Componentes reutilizáveis
+    ├── hooks/             # Hooks genéricos
+    ├── router/            # AppRouter.tsx + GameGuard
+    ├── store/             # gameStore.ts (Zustand)
+    ├── types/             # game.types.ts (Player, DrinkEvent, GameState)
+    └── utils/
 ```
 
-**Regra:** cada `feature/` carrega seus próprios tipos, componentes e hooks. Nunca importar
-componentes de uma feature dentro de outra — use `components/` para código verdadeiramente
-compartilhado.
+**Regra:** módulos dentro de `modules/` nunca importam uns dos outros diretamente. Código compartilhado vai em `shared/`.
 
 ---
 
-## Estado Global — Zustand Store
+## Aliases de path
+
+Configurados no `vite.config.ts` e `tsconfig.json`.
+Sempre use aliases, nunca caminhos relativos longos (`../../`).
 
 ```ts
-// src/store/useGameStore.ts
-
-interface Player {
-  id: string
-  name: string
-  color: string       // hex ou slug de cor identificadora
-  score: number       // >= 0
-  active: boolean
-  joinedAt: number    // timestamp
-}
-
-interface DrinkEvent {
-  drinkId: string
-  drinkName: string
-  thumb: string
-  bonus: number
-  winnerId: string | null
-  triggeredAt: number
-}
-
-type GameStatus = 'idle' | 'setup' | 'playing' | 'finished'
-
-interface GameStore {
-  status: GameStatus
-  players: Player[]
-  events: DrinkEvent[]
-
-  // Actions
-  startGame: () => void
-  resetGame: () => void           // limpa localStorage
-  addPlayer: (name: string, color: string) => void
-  removePlayer: (id: string) => void
-  addPoints: (playerId: string, pts: number) => void
-  removePoints: (playerId: string, pts: number) => void
-  eliminatePlayer: (playerId: string) => void
-  applyDrinkBonus: (event: DrinkEvent) => void
-  skipDrinkEvent: () => void      // -5 pts para todos os ativos
-  finishGame: () => void
-}
+'@'         → src/
+'@modules'  → src/modules/
+'@app'      → src/app/
+'@shared'   → src/shared/
 ```
 
-**Persist config:**
+Exemplos de uso:
 ```ts
-persist(store, {
-  name: 'drunkrats-game',
-  // serializa apenas o necessário
-})
+import { useGameStore } from '@shared/store/gameStore'
+import type { Player } from '@shared/types/game.types'
+import { PlayerCard } from '@modules/control/components/PlayerCard'
 ```
 
 ---
 
-## Rotas
+## Roteamento
 
-| Rota | Componente | Acesso |
+Arquivo: `src/shared/router/AppRouter.tsx`
+
+| Rota | Componente | Protegida |
 |---|---|---|
-| `/` | `HomePage` | sempre |
-| `/players` | `PlayersPage` | status: `idle` → `setup` |
-| `/control` | `ControlPage` | status: `playing` |
-| `/scoreboard` | `ScoreboardPage` | status: `playing` ou `finished` |
-| `/drink` | `DrinkPage` | status: `playing` |
+| `/` | `HomePage` | Não |
+| `/players` | `PlayersPage` | Não |
+| `/control` | `ControlPage` | Sim |
+| `/scoreboard` | `ScoreboardPage` | Sim |
+| `/drink` | `DrinkPage` | Sim |
 
-Redirecionar para `/` se o `status` não permitir a rota acessada.
+Rotas protegidas usam `GameGuard`, que lê `status` do store. Se `status === 'idle'`, redireciona para `/`.
 
----
 
-## Lógica de Pontuação
+## Integração com TheCocktailDB
 
+- Base URL: `https://www.thecocktaildb.com/api/json/v1/1`
+- Endpoint usado: `GET /random.php`
+- Sem autenticação necessária
+- Gerenciado via Tanstack Query no hook `src/modules/drink/hooks/useRandomDrink.ts`
+- Sempre trate `isLoading` (skeleton) e `isError` (botão de retry) na UI
+
+## Convenções de código
+
+**Commits:** Conventional Commits obrigatório.
 ```
-pts = ml × (teor_alcoolico / 100)   // calculadora ml × %
-```
-
-Botões rápidos no Controle: `+5`, `+10`, `+20` pontos fixos.
-
-**Evento Drink:**
-- Vencedor (quem preparou primeiro): recebe `bonus` definido pela API response
-- Pular evento: `-5` pts para **todos** os jogadores ativos
-- `applyDrinkBonus()` registra o `DrinkEvent` no array `events` e retorna o usuário para `/control`
-
-**Desistência:**
-- `eliminatePlayer(id)` seta `active: false` — sem volta
-- Jogador permanece visível no placar com status "DESISTIU"
-
----
-
-## Integração TheCocktailDB
-
-```
-GET https://www.thecocktaildb.com/api/json/v1/1/random.php
+feat: adiciona tela de placar
+fix: corrige score negativo ao remover pontos
+chore: atualiza dependências
+refactor: extrai componente PlayerCard
 ```
 
-Sem autenticação. Retorna `drinks[0]` com:
-- `idDrink`, `strDrink`, `strDrinkThumb`, `strCategory`
-- `strIngredient1..15`, `strMeasure1..15`
+**Componentes:** functional components com TypeScript. Props tipadas com `interface`, nunca `type` para props de componente.
 
-**Fallback:** se a requisição falhar, exibir "Shot de destilado" com bônus padrão de 10 pts.
+**Estilização:** Tailwind para layout e espaçamento. Ant Design para componentes complexos (tabelas, forms, toasts, modals). MUI apenas para tokens de design (cores, tipografia) — não instanciar componentes MUI diretamente na UI.
 
-Cache via React Query com `staleTime: 0` (sempre novo drink no evento).
-
----
-
-
-Tipografia: hierarquia MD3 — Display → Headline → Body → Label.
-
-Layout responsivo:
-- Mobile: Bottom Navigation
-- Tablet: Navigation Rail
-- Desktop: Navigation Drawer
-
-Estados visuais obrigatórios: `hover`, `pressed`, `focused`, `disabled`.
-
-Animações: fade/slide em transições de tela; animação de pontuação ao adicionar/remover pts.
+**Nomes de arquivo:**
+- Componentes e páginas: `PascalCase.tsx` (ex: `PlayerCard.tsx`, `ControlPage.tsx`)
+- Hooks: prefixo `use` + camelCase (ex: `useGameStore.ts`, `useRandomDrink.ts`)
+- Tipos: sufixo `.types.ts` (ex: `game.types.ts`)
 
 ---
 
-## Convenções de Código
+## Regras de negócio importantes
 
-- **TypeScript strict** — sem `any`
-- **Componentes funcionais** + hooks
-- **Nomeação:** PascalCase para componentes, camelCase para hooks (`useXxx`), SCREAMING_SNAKE para constantes
-- **Imports:** absolutos via alias `@/` apontando para `src/`
-- **Sem side effects em renders** — toda mutação via actions do store
-- **Acessibilidade:** botões com `aria-label`, cores com contraste mínimo 4.5:1
+- Score nunca vai abaixo de 0 — `removeScore` deve checar antes de subtrair
+- Mínimo de 2 jogadores para habilitar o botão "Iniciar"
+- Jogadores com `active: false` aparecem ao final do ranking com badge de desistência
+- "Pular Evento" em `/drink` subtrai 5 pontos de todos os jogadores ativos
+- `resetGame()` deve limpar o localStorage completamente antes de reiniciar o estado
+- Se houver jogo salvo no localStorage ao carregar a Home, exibir botão "Continuar" além de "Nova Partida"
 
----
-
-## Scripts
-
-```bash
-npm run dev       # dev server com HMR (Vite)
-npm run build     # bundle de produção
-npm run preview   # preview do build
-npm run lint      # ESLint
-npm run typecheck # tsc --noEmit
-```
-
----
-
-## Restrições Importantes
-
-1. **Sem backend** — nenhuma chamada para servidores próprios
-2. **Sem autenticação** — zero tokens, zero sessão server-side
-3. **localStorage é a única persistência** — e deve ser limpo em `resetGame()`
-4. **Score nunca negativo** — validar `Math.max(0, score - pts)` ao remover pontos
-5. **Mínimo 2 jogadores** para habilitar o botão "Iniciar"
-6. **Jogador eliminado não participa** de eventos drink nem recebe/perde pontos automáticos

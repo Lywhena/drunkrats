@@ -1,7 +1,7 @@
-import NavBar from '@/components/NavBar'
-import AppBackground from '@/components/AppBackground'
-import Router from './router'
-import { useGameStore } from '@/store/useGameStore'
+import NavBar from '@/modules/layout/NavBar'
+import AppBackground from '@/modules/layout/AppBackground'
+import Router from './app/router/router'
+import { useGameStore } from '@/shared/store/useGameStore'
 
 
 export default function App() {

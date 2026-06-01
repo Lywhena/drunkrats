@@ -1,5 +1,5 @@
-import PlayerAvatar from '@/components/PlayerAvatar'
-import type { Player } from '@/store/useGameStore'
+import PlayerAvatar from '@/shared/components/PlayerAvatar'
+import type { Player } from '@/shared/store/useGameStore'
 
 interface PlayerCardProps {
   player: Player

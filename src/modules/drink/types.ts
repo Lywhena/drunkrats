@@ -1,4 +1,4 @@
-import type { CocktailDBDrink } from '@/lib/cocktaildb'
+import type { CocktailDBDrink } from '@/shared/lib/cocktaildb'
 
 export type { CocktailDBDrink }
 

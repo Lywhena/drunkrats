@@ -1,4 +1,4 @@
-import '@/assets/background.css'
+import '@app/assets/background.css'
 
 export default function AppBackground() {
   return (
