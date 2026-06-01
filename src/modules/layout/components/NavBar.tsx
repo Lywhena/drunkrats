@@ -1,23 +1,10 @@
 import { NavLink } from 'react-router-dom'
 import { useGameStore } from '@/shared/store/useGameStore'
-
-interface NavItem {
-  to: string
-  label: string
-  icon: string
-  ariaLabel: string
-}
-
-const NAV_ITEMS: NavItem[] = [
-  { to: '/',            label: 'Home',    icon: '🏠', ariaLabel: 'Ir para a página inicial' },
-  { to: '/control',     label: 'Controle', icon: '🎮', ariaLabel: 'Ir para o controle da partida' },
-  { to: '/scoreboard',  label: 'Placar',  icon: '🏆', ariaLabel: 'Ver o placar' },
-]
+import { navItems } from '@modules/layout/types/navBar'
 
 export default function NavBar() {
   const status = useGameStore((s) => s.status)
 
-  // NavBar só aparece durante a partida
   if (status !== 'playing' && status !== 'finished') return null
 
   return (
@@ -31,7 +18,7 @@ export default function NavBar() {
         }}
         aria-label="Navegação principal"
       >
-        {NAV_ITEMS.map((item) => (
+        {navItems.map((item) => (
           <NavLink
             key={item.to}
             to={item.to}
@@ -42,7 +29,7 @@ export default function NavBar() {
                hover:text-[var(--text-h)]`
             }
           >
-            <span className="text-xl leading-none" aria-hidden="true">{item.icon}</span>
+            <i className="material-icons-outlined text-xl leading-none" aria-hidden="true">{item.icon}</i>
             <span className="text-label">{item.label}</span>
           </NavLink>
         ))}
@@ -57,7 +44,7 @@ export default function NavBar() {
         }}
         aria-label="Navegação principal"
       >
-        {NAV_ITEMS.map((item) => (
+        {navItems.map((item) => (
           <NavLink
             key={item.to}
             to={item.to}
@@ -71,7 +58,7 @@ export default function NavBar() {
                }`
             }
           >
-            <span className="text-2xl leading-none" aria-hidden="true">{item.icon}</span>
+            <i className="material-icons text-2xl leading-none" aria-hidden="true">{item.icon}</i>
             <span className="text-label text-[10px]">{item.label}</span>
           </NavLink>
         ))}
@@ -95,7 +82,7 @@ export default function NavBar() {
           </span>
         </div>
 
-        {NAV_ITEMS.map((item) => (
+        {navItems.map((item) => (
           <NavLink
             key={item.to}
             to={item.to}
@@ -108,7 +95,7 @@ export default function NavBar() {
                }`
             }
           >
-            <span className="text-xl" aria-hidden="true">{item.icon}</span>
+            <i className="material-icons text-xl" aria-hidden="true">{item.icon}</i>
             <span>{item.label}</span>
           </NavLink>
         ))}

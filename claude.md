@@ -1,9 +1,3 @@
-# CLAUDE.md — DrunkRats
-
-Aplicação React para gincanas competitivas de bebidas entre amigos.
-Zero backend, zero login — tudo roda no navegador via localStorage.
-
----
 
 ## Comandos essenciais
 
@@ -15,7 +9,6 @@ npm run lint       # ESLint
 npm run typecheck  # tsc --noEmit
 ```
 
----
 
 ## Stack
 
@@ -30,49 +23,7 @@ npm run typecheck  # tsc --noEmit
 | UI components | Ant Design v5 |
 | Design system | Material Design 3 via MUI v6 |
 | Estilização | Tailwind CSS (via plugin Vite, sem postcss) |
-| Deploy | Cloudflare Pages via GitHub Actions |
 
----
-
-## Arquitetura
-
-O projeto segue **Screaming Architecture** (Robert Martin): organização por domínio/feature, não por tipo de arquivo.
-
-```
-src/
-├── app/                   # Entrypoint e configurações globais
-│   ├── App.tsx
-│   ├── main.tsx
-│   └── index.css          # Tailwind base + estilos globais
-├── assets/                # Imagens, fontes, ícones estáticos
-├── modules/               # Todos os domínios de feature
-│   ├── control/           # Controle de pontuação (/control)
-│   │   ├── components/
-│   │   └── types.ts
-│   ├── drink/             # Evento drink aleatório (/drink)
-│   │   ├── components/
-│   │   ├── hooks/         # useRandomDrink (Tanstack Query)
-│   │   └── types.ts
-│   ├── home/              # Tela inicial (/)
-│   │   └── components/
-│   ├── players/           # Cadastro de jogadores (/players)
-│   │   ├── components/
-│   │   └── types.ts
-│   └── scoreboard/        # Placar (/scoreboard)
-│       ├── components/
-│       └── types.ts
-└── shared/                # Código compartilhado entre módulos
-    ├── components/        # Componentes reutilizáveis
-    ├── hooks/             # Hooks genéricos
-    ├── router/            # AppRouter.tsx + GameGuard
-    ├── store/             # gameStore.ts (Zustand)
-    ├── types/             # game.types.ts (Player, DrinkEvent, GameState)
-    └── utils/
-```
-
-**Regra:** módulos dentro de `modules/` nunca importam uns dos outros diretamente. Código compartilhado vai em `shared/`.
-
----
 
 ## Aliases de path
 
@@ -119,6 +70,8 @@ Rotas protegidas usam `GameGuard`, que lê `status` do store. Se `status === 'id
 - Sempre trate `isLoading` (skeleton) e `isError` (botão de retry) na UI
 
 ## Convenções de código
+
+Use sempre alias para a importação de arquivos
 
 **Commits:** Conventional Commits obrigatório.
 ```

@@ -1,5 +1,5 @@
-import NavBar from '@/modules/layout/NavBar'
-import AppBackground from '@/modules/layout/AppBackground'
+import NavBar from '@modules/layout/components/NavBar'
+import AppBackground from '@/modules/layout/components/AppBackground'
 import Router from './app/router/router'
 import { useGameStore } from '@/shared/store/useGameStore'
 
@@ -18,7 +18,7 @@ export default function App() {
         className={[
           'flex-1 flex flex-col items-center w-full',
           hasNav
-            ? 'pb-[7rem] md:pb-10 md:pl-20 xl:pl-56'
+            ? 'pb-[7rem] md:pb-10 md:pl-20 xl:pl-56 md:pt-0 pt-[4.5rem]'
             : 'pb-10',
         ].join(' ')}
       >
@@ -32,7 +32,7 @@ export default function App() {
           'h-10 flex items-center justify-center',
           'text-label',
           hasNav
-            ? 'bottom-[4.5rem] md:bottom-0 md:pl-20 xl:pl-56'
+            ? 'bottom-0 md:bottom-0 md:pl-20 xl:pl-56'
             : 'bottom-0',
         ].join(' ')}
         style={{
