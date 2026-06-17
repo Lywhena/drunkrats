@@ -15,7 +15,6 @@ export default function DrinkCard({ drink }: DrinkCardProps) {
       style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
       aria-label={`Drink sorteado: ${drink.strDrink}`}
     >
-      {/* Imagem */}
       {drink.strDrinkThumb && !isFallback ? (
         <img
           src={drink.strDrinkThumb}
@@ -29,12 +28,10 @@ export default function DrinkCard({ drink }: DrinkCardProps) {
           style={{ background: 'var(--bg)' }}
           aria-hidden="true"
         >
-          🥃
         </div>
       )}
 
       <div className="p-5 flex flex-col gap-4">
-        {/* Nome e categoria */}
         <div>
           <p className="text-label mb-1" style={{ color: 'var(--accent)' }}>
             {drink.strCategory}
@@ -49,7 +46,6 @@ export default function DrinkCard({ drink }: DrinkCardProps) {
           )}
         </div>
 
-        {/* Ingredientes */}
         {ingredients.length > 0 && (
           <div>
             <p className="text-label mb-2" style={{ color: 'var(--text)' }}>

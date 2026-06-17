@@ -63,7 +63,6 @@ export default function ScoreboardPage() {
   return (
     <div className="min-h-svh flex flex-col" style={{ background: 'var(--bg)' }}>
 
-      {/* ── Header ─────────────────────────────────────────────── */}
       <header
         className="sticky top-0 z-10 px-6 py-4 flex items-center justify-between"
         style={{ background: 'var(--bg)', borderBottom: '1px solid var(--border)' }}
@@ -73,7 +72,7 @@ export default function ScoreboardPage() {
             className="text-headline font-black uppercase"
             style={{ color: 'var(--text-h)' }}
           >
-            {isFinished ? 'A Ressaca Está Selada.' : '§ Placar'}
+            {isFinished ? 'A Ressaca Está Selada.' : 'Placar'}
           </h1>
           <p className="text-label" style={{ color: 'var(--text)' }}>
             {isFinished
@@ -101,12 +100,10 @@ export default function ScoreboardPage() {
 
       <main className="flex-1 w-full max-w-xl mx-auto px-6 py-6 flex flex-col gap-8">
 
-        {/* ── Pódio (só no modo final) ───────────────────────────── */}
         {isFinished && top3.length >= 1 && (
           <Podium top3={top3} />
         )}
 
-        {/* ── Ranking em tempo real (modo playing) ────────────────── */}
         {!isFinished && rankedPlayers.length > 0 && (
           <section aria-labelledby="live-heading">
             <h2
@@ -120,12 +117,10 @@ export default function ScoreboardPage() {
           </section>
         )}
 
-        {/* ── Classificação completa (modo final) ─────────────────── */}
         {isFinished && rankedPlayers.length > 0 && (
           <RankingTable players={rankedPlayers} maxScore={maxScore} />
         )}
 
-        {/* ── Eventos drink ──────────────────────────────────────── */}
         {events.length > 0 && (
           <section aria-labelledby="events-heading">
             <h2
@@ -179,7 +174,6 @@ export default function ScoreboardPage() {
           </section>
         )}
 
-        {/* ── Estatísticas (só no modo final) ────────────────────── */}
         {isFinished && (
           <section
             className="p-5 rounded-2xl"
@@ -213,7 +207,6 @@ export default function ScoreboardPage() {
           </section>
         )}
 
-        {/* ── Campeão (só no modo final) ──────────────────────────── */}
         {isFinished && champion && (
           <section
             className="p-6 rounded-2xl text-center"
@@ -232,7 +225,6 @@ export default function ScoreboardPage() {
           </section>
         )}
 
-        {/* ── Ações (modo final) ─────────────────────────────────── */}
         {isFinished && (
           <button
             onClick={handleReset}

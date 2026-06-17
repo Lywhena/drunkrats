@@ -141,7 +141,7 @@ export default function ControlPage() {
             }}
             aria-label="Ver o placar"
           >
-            🏆 PLACAR
+           PLACAR
           </button>
           <button
             onClick={() => navigate('/drink')}
@@ -150,7 +150,7 @@ export default function ControlPage() {
             style={{ background: 'var(--accent)', color: '#fff' }}
             aria-label="Sortear evento drink"
           >
-            🎲 EVENTO DRINK
+           EVENTO DRINK
           </button>
         </div>
       </header>
